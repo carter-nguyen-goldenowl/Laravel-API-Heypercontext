@@ -33,7 +33,7 @@ return [
     'google' => [
         'client_id'     => env('622622571724-6i6udqn1pfdl0ajkokt9d6utgae050bv.apps.googleusercontent.com'),
         'client_secret' => env('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'),
-        'redirect'      => env('https://5ae3-113-161-66-128.ap.ngrok.io'),
+        'redirect'      => env('https://c671-113-161-66-128.ap.ngrok.io'),
     ],
 
 ];
