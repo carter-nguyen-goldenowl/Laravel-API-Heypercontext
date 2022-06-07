@@ -34,8 +34,30 @@ abstract class BaseRepository implements RepositoryInterface
         );
     }
 
+    public function getAll()
+    {
+        return $this->getModel()->all();
+    }
+
     public function store($attributes = [])
     {
         return $this->model->create($attributes);
+    }
+
+    public function update($id, $attributes = [])
+    {
+        $model = $this->find($id);
+        return $model->update($attributes);
+    }
+
+    public function find($id)
+    {
+        return $this->getModel()->find($id);
+    }
+
+    public function delete($id)
+    {
+        $this->getModel()->find($id)->delete($id);
+        return TRUE;
     }
 }
