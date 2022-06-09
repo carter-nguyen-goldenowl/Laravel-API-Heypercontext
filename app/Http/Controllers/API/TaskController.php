@@ -4,6 +4,11 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateTaskRequest;
+use App\Http\Requests\CreateTodoTaskRequest;
+use App\Http\Requests\DeleteTaskRequest;
+use App\Http\Requests\DeleteTodoTaskRequest;
+use App\Http\Requests\SetCompleteTodoTaskRequest;
+use App\Http\Requests\UpdateTaskRequest;
 use App\Http\Resources\TaskResource;
 use App\Repositories\Task\TaskInterface;
 use App\Repositories\TodoTask\TodoTaskInterface;
@@ -19,6 +24,19 @@ class TaskController extends Controller
         $this->taskRepository = $taskInterface;
         $this->todoTaskRepository = $todoTaskInterface;
     }
+
+    public function getAllTask()
+    {
+        $now = Carbon::now();
+        $listTask = $this->taskRepository->getAllTask();
+        collect($listTask)->map(function ($task) use ($now) {
+            $dt = Carbon::create($task->updated_at);
+            $task->difftime = $dt->diffForHumans($now);
+        });
+
+        return TaskResource::collection($listTask);
+    }
+
     public function createTask(CreateTaskRequest $request)
     {
         $data = $request->all();
@@ -31,44 +49,56 @@ class TaskController extends Controller
         ]);
     }
 
-    public function getAllTask()
+    public function updateTask(UpdateTaskRequest $request, $id)
     {
-        $now = Carbon::now();
+        $data = $request->all();
 
-        $listTask = $this->taskRepository->getAllTask();
-        $count_todo = $this->taskRepository->countTodo();
-        // foreach ($listTask as &$task) {
-        //     $dt = Carbon::create($task['created_at']);
-        //     $task['difftime'] = $dt->diffForHumans($now);
-        //     $count_todo = $this->taskRepository->countTodo();
-        //     $count_done = $this->taskRepository->countDone();
-        //     $task['sum_todo'] = $count_todo->todotasks_count;
-        //     $task['sum_done'] = $count_done->to_do_task_dones_count;
-        // }
+        $this->taskRepository->update($id, $data);
 
-        // collect($listTask)->map(function ($task) use ($now) {
-        //     $dt = Carbon::create($task->created_at);
-        //     $task->difftime = $dt->diffForHumans($now);
-        //     // $count_todo = $this->taskRepository->countTodo();
-        //     // $count_done = $this->taskRepository->countDone();
-        //     // $task->sum_todo = $count_todo->todotasks_count;
-        //     // $task->sum_done = $count_done->to_do_task_dones_count;
-        // });
+        $task = $this->taskRepository->find($id);
 
-        // return response()->json([
-        //     'data' => $count_todo
-        // ]);
-
-        return TaskResource::collection($listTask, $count_todo);
+        return response()->json([
+            'data' => $task,
+            'message' => 'Updated Successfully'
+        ]);
     }
 
-    public function createTodoTask(Request $request)
+    public function deleteTask(DeleteTaskRequest $request, $id)
+    {
+        return response()->json([
+            'data' => $this->taskRepository->delete($id),
+            'message' => 'Deleted Successfully',
+        ]);
+    }
+
+    public function createTodoTask(CreateTodoTaskRequest $request)
     {
         $data = $request->all();
         $todoTask = $this->todoTaskRepository->store($data);
+        $task = $this->taskRepository->find($todoTask->task_id);
+        $task->status = 200;
+        $task->save();
         return response()->json([
             'data' => $todoTask,
             'message' => 'Add Todo Task Successfully',
+        ]);
+    }
+
+    public function deleteTodoTask(DeleteTodoTaskRequest $request, $id)
+    {
+        return response()->json([
+            'data' => $this->todoTaskRepository->delete($id),
+        ]);
+    }
+
+    public function setCompleteTodoTask(SetCompleteTodoTaskRequest $request, $id)
+    {
+        $todoTask = $this->todoTaskRepository->find($id);
+        $todoTask->status = 1;
+        $todoTask->save();
+
+        return response()->json([
+            'data' => $todoTask,
         ]);
     }
 }

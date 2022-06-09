@@ -27,9 +27,9 @@ class TaskResource extends JsonResource
             'description' => $this->description,
             'createBy' => $this->user->name,
             'difftime' => $this->difftime,
-            'todo_task' => $this->todotasks,
-            // 'sum_todo' => $this->sum_todo,
-            // 'sum_done' => $this->sum_done,
+            'todo_tasks' => $this->todotasks,
+            'sum_todo' => $this->todotasks_count,
+            'sum_done' => $this->to_do_task_dones_count,
         ];
     }
 }

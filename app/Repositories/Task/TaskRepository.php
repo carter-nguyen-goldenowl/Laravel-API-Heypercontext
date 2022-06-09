@@ -14,16 +14,6 @@ class TaskRepository extends BaseRepository implements TaskInterface
 
     public function getAllTask()
     {
-        return $this->model->with(['user', 'todotasks'])->get();
-    }
-
-    public function countTodo()
-    {
-        return $this->model->withCount('todotasks')->get();
-    }
-
-    public function countDone()
-    {
-        return $this->model->withCount('toDoTaskDones')->get();
+        return $this->model->with(['user', 'todotasks'])->withCount(['todotasks', 'toDoTaskDones'])->get();
     }
 }

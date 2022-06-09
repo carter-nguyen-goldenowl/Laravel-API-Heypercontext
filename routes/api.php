@@ -21,11 +21,17 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
-Route::get('/task', [TaskController::class, 'getAllTask']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/task', [TaskController::class, 'createTask']);
-    // Route::get('/task', [TaskController::class, 'getAllTask']);
+    Route::put('/task/{id}', [TaskController::class, 'updateTask']);
+    Route::delete('/task/{id}', [TaskController::class, 'deleteTask']);
+    Route::get('/task', [TaskController::class, 'getAllTask']);
     Route::get('/user', [UserController::class, "getAllUser"]);
     Route::post('/todotask', [TaskController::class, 'createTodoTask']);
+    Route::patch('/todotask/completed/{id}', [TaskController::class, 'setCompleteTodoTask']);
+    Route::delete('/todotask/{id}', [TaskController::class, 'deleteTodoTask']);
+
+
+    Route::post('/logout', [AuthController::class, 'logout']);
 });

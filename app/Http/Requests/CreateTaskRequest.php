@@ -31,7 +31,7 @@ class CreateTaskRequest extends FormRequest
             'user_tag' => "json|nullable",
             'has_tag' => "json|nullable",
             'status' => 'numeric|nullable',
-            'description' => 'nullable',
+            'description' => 'required|nullable',
         ];
     }
 }

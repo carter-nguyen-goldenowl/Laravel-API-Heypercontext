@@ -15,8 +15,7 @@ class CreateTodoTasksTable extends Migration
     {
         Schema::create('todo_tasks', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('task_id')->constrained('tasks');
+            $table->foreignId('task_id')->constrained('tasks')->onDelete('cascade');
             $table->string('todo');
             $table->integer('status')->default(0)->comment('0: todo, 1: done');
             $table->timestamps();
