@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Repositories\Meeting\MeetingInterface;
+use App\Repositories\Meeting\MeetingRepository;
 use App\Repositories\Task\TaskInterface;
 use App\Repositories\Task\TaskRepository;
 use App\Repositories\TodoTask\TodoTaskInterface;
@@ -32,5 +34,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(UserInterface::class, UserRepository::class);
         $this->app->bind(TaskInterface::class, TaskRepository::class);
         $this->app->bind(TodoTaskInterface::class, TodoTaskRepository::class);
+        $this->app->bind(MeetingInterface::class, MeetingRepository::class);
     }
 }

@@ -2,9 +2,9 @@
 
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\GoogleController;
+use App\Http\Controllers\API\MeetingController;
 use App\Http\Controllers\API\TaskController;
 use App\Http\Controllers\API\UserController;
-use App\Http\Controllers\API\ZoomController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +22,8 @@ use Illuminate\Support\Facades\Route;
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
+Route::get('/meeting/1', [MeetingController::class, 'deleteMeeting']);
+
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/task', [TaskController::class, 'createTask']);
     Route::put('/task/{id}', [TaskController::class, 'updateTask']);
@@ -32,6 +34,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::patch('/todotask/completed/{id}', [TaskController::class, 'setCompleteTodoTask']);
     Route::delete('/todotask/{id}', [TaskController::class, 'deleteTodoTask']);
 
+    Route::post('/meeting', [MeetingController::class, 'createMeeting']);
+    Route::get('/meeting', [MeetingController::class, 'getAllMeeting']);
+    Route::delete('/meeting/{id}', [MeetingController::class, 'deleteMeeting']);
 
     Route::post('/logout', [AuthController::class, 'logout']);
 });
