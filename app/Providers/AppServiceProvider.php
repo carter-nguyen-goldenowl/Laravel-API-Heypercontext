@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Repositories\Calendar\CalendarInterface;
+use App\Repositories\Calendar\CalendarRepository;
 use App\Repositories\Meeting\MeetingInterface;
 use App\Repositories\Meeting\MeetingRepository;
 use App\Repositories\Task\TaskInterface;
@@ -35,5 +37,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(TaskInterface::class, TaskRepository::class);
         $this->app->bind(TodoTaskInterface::class, TodoTaskRepository::class);
         $this->app->bind(MeetingInterface::class, MeetingRepository::class);
+        $this->app->bind(CalendarInterface::class, CalendarRepository::class);
     }
 }

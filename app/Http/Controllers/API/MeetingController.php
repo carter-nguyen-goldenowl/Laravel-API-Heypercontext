@@ -7,8 +7,8 @@ use App\Http\Requests\CreateMeetingRequest;
 use App\Http\Resources\MeetingResource;
 use App\Repositories\Meeting\MeetingInterface;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use MacsiDigital\Zoom\Facades\Zoom;
+
 
 class MeetingController extends Controller
 {

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\EventController;
 use App\Http\Controllers\API\GoogleController;
 use App\Http\Controllers\API\MeetingController;
 use App\Http\Controllers\API\TaskController;
@@ -22,8 +23,6 @@ use Illuminate\Support\Facades\Route;
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::get('/meeting/1', [MeetingController::class, 'deleteMeeting']);
-
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/task', [TaskController::class, 'createTask']);
     Route::put('/task/{id}', [TaskController::class, 'updateTask']);
@@ -37,6 +36,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/meeting', [MeetingController::class, 'createMeeting']);
     Route::get('/meeting', [MeetingController::class, 'getAllMeeting']);
     Route::delete('/meeting/{id}', [MeetingController::class, 'deleteMeeting']);
+
+    Route::post('/calendar', [EventController::class, 'createEvent']);
+    Route::get('/calendar', [EventController::class, 'getAllEvent']);
+    Route::delete('/calendar/{id}', [EventController::class, 'deleteEvent']);
 
     Route::post('/logout', [AuthController::class, 'logout']);
 });
