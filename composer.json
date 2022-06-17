@@ -17,7 +17,9 @@
         "laravel/socialite": "^5.5",
         "laravel/tinker": "^2.0",
         "macsidigital/laravel-zoom": "^5.0",
-        "spatie/laravel-google-calendar": "^3.5"
+        "predis/predis": "^2.0",
+        "spatie/laravel-google-calendar": "^3.5",
+        "elasticquent/elasticquent": "dev-master"
     },
     "require-dev": {
         "facade/ignition": "^2.3.6",

@@ -16,4 +16,9 @@ class TaskRepository extends BaseRepository implements TaskInterface
     {
         return $this->model->with(['user', 'todotasks'])->withCount(['todotasks', 'toDoTaskDones'])->get();
     }
+
+    public function getTaskByName($name)
+    {
+        return $this->model->where('name', 'like', "%{$name}%")->with(['user', 'todotasks'])->withCount(['todotasks', 'toDoTaskDones'])->get();
+    }
 }

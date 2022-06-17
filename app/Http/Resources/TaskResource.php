@@ -15,21 +15,21 @@ class TaskResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'user_id' => $this->user_id,
-            'priority' => $this->priority,
-            'start_date' => $this->start_date,
-            'end_date' => $this->end_date,
-            'user_tag' => $this->user_tag,
-            'hash_tag' => $this->hash_tag,
-            'status' => $this->status,
-            'description' => $this->description,
-            'createBy' => $this->user->name,
-            'difftime' => $this->difftime,
-            'todo_tasks' => $this->todotasks,
-            'sum_todo' => $this->todotasks_count,
-            'sum_done' => $this->to_do_task_dones_count,
+            'id' => $this['id'],
+            'name' => $this['name'],
+            'user_id' => $this['user_id'],
+            'priority' => $this['priority'],
+            'start_date' => $this['start_date'],
+            'end_date' => $this['end_date'],
+            'user_tag' => $this['user_tag'],
+            'hash_tag' => $this['hash_tag'],
+            'status' => $this['status'],
+            'description' => $this['description'],
+            'createBy' => $this['user']['name'],
+            'difftime' => $this['difftime'],
+            'todo_tasks' => $this['todotasks'],
+            'sum_todo' => $this['todotasks_count'],
+            'sum_done' => $this['to_do_task_dones_count'],
         ];
     }
 }

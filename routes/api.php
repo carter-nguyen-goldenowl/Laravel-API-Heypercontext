@@ -32,6 +32,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/todotask', [TaskController::class, 'createTodoTask']);
     Route::patch('/todotask/completed/{id}', [TaskController::class, 'setCompleteTodoTask']);
     Route::delete('/todotask/{id}', [TaskController::class, 'deleteTodoTask']);
+    Route::get('/task/search/{name}', [TaskController::class, 'searchTaskByName']);
 
     Route::post('/meeting', [MeetingController::class, 'createMeeting']);
     Route::get('/meeting', [MeetingController::class, 'getAllMeeting']);

@@ -10,19 +10,23 @@ use App\Http\Requests\DeleteTodoTaskRequest;
 use App\Http\Requests\SetCompleteTodoTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Http\Resources\TaskResource;
+use App\Jobs\SendEmailForTask;
 use App\Repositories\Task\TaskInterface;
 use App\Repositories\TodoTask\TodoTaskInterface;
+use App\Repositories\User\UserInterface;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redis;
 
 class TaskController extends Controller
 {
     protected $taskRepository;
     protected $todoTaskRepository;
-    public function __construct(TaskInterface $taskInterface, TodoTaskInterface $todoTaskInterface)
+    protected $userRepository;
+    public function __construct(TaskInterface $taskInterface, TodoTaskInterface $todoTaskInterface, UserInterface $userInterface)
     {
         $this->taskRepository = $taskInterface;
         $this->todoTaskRepository = $todoTaskInterface;
+        $this->userRepository = $userInterface;
     }
 
     public function getAllTask()
@@ -42,6 +46,18 @@ class TaskController extends Controller
         $data = $request->all();
 
         $task = $this->taskRepository->store($data);
+
+        $arr = json_decode($task->user_tag, true);
+        $names = [];
+        foreach ($arr as $key => $value) {
+            array_push($names, $value['value']);
+        }
+
+        $emails = $this->userRepository->getMailByName($names);
+
+        SendEmailForTask::dispatch($emails);
+
+        Redis::flushDB();
 
         return response()->json([
             'data' => $task,
@@ -100,5 +116,23 @@ class TaskController extends Controller
         return response()->json([
             'data' => $todoTask,
         ]);
+    }
+
+    public function searchTaskByName($name)
+    {
+        if (Redis::get($name)) {
+            $arr_listTask = json_decode(Redis::get($name), true);
+            $collection_listTask = collect($arr_listTask);
+            return TaskResource::collection($collection_listTask);
+        } else {
+            $now = Carbon::now();
+            $listTask = $this->taskRepository->getTaskByName($name);
+            collect($listTask)->map(function ($task) use ($now) {
+                $dt = Carbon::create($task->updated_at);
+                $task->difftime = $dt->diffForHumans($now);
+            });
+            Redis::set($name, $listTask);
+            return TaskResource::collection($listTask);
+        }
     }
 }

@@ -17,4 +17,9 @@ class UserRepository extends BaseRepository implements UserInterface
     {
         return $this->model::where('email', $email)->first();
     }
+
+    public function getMailByName($names)
+    {
+        return  $this->model->whereIn('name', $names)->pluck('email');
+    }
 }
